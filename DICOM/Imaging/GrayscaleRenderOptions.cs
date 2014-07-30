@@ -97,12 +97,6 @@ namespace Dicom.Imaging {
 		/// <param name="dataset">Dataset to extract <see cref="GrayscaleRenderOptions"/> from</param>
 		/// <returns>New grayscale render options instance</returns>
 		public static GrayscaleRenderOptions FromDataset(DicomDataset dataset) {
-			var bits = BitDepth.FromDataset(dataset);
-			var options = new GrayscaleRenderOptions(bits);
-
-			options.RescaleSlope = dataset.Get<double>(DicomTag.RescaleSlope, 1.0);
-			options.RescaleIntercept = dataset.Get<double>(DicomTag.RescaleIntercept, 0.0);
-
 			if (dataset.Contains(DicomTag.WindowWidth) && dataset.Get<double>(DicomTag.WindowWidth) != 0.0) {
 				//If dataset contains WindowWidth and WindowCenter valid attributes used initially for the grayscale options
 				return FromWindowLevel(dataset);
@@ -115,11 +109,6 @@ namespace Dicom.Imaging {
 				//WindowWidth and WindowCenter
 				return FromMinMax(dataset);
 			}
-
-			options.VOILUTFunction = dataset.Get<string>(DicomTag.VOILUTFunction, "LINEAR");
-			options.Monochrome1 = dataset.Get<PhotometricInterpretation>(DicomTag.PhotometricInterpretation) == PhotometricInterpretation.Monochrome1;
-
-			return options;
 		}
 
 		public static GrayscaleRenderOptions FromWindowLevel(DicomDataset dataset) {
