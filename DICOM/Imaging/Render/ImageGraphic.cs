@@ -22,7 +22,8 @@ namespace Dicom.Imaging.Render {
 	/// <summary>
 	/// The Image Graphic implementation of <seealso cref="IGraphic"/>
 	/// </summary>
-	public class ImageGraphic : IGraphic {
+    public class ImageGraphic : IGraphic, IDisposable
+    {
 		#region Protected Members
 		protected IPixelData _originalData;
 		protected IPixelData _scaledData;
@@ -406,5 +407,24 @@ namespace Dicom.Imaging.Render {
 		}
 #endif
 		#endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
 	}
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_pixels != null)
+            {
+                _pixels.Dispose();
+                _pixels = null;
+}
+        }
+
+        #endregion
+    }
 }
