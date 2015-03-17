@@ -50,29 +50,29 @@ namespace Dicom {
 		private static DicomDictionary _default;
 
 		private static void LoadInternalDictionaries() {
-			lock (_lock) {
-				if (_default == null) {
-					_default = new DicomDictionary();
-					_default.Add(new DicomDictionaryEntry(DicomMaskedTag.Parse("xxxx", "0000"), "Group Length", "GroupLength", DicomVM.VM_1, false, DicomVR.UL));
-					LoadGeneratedDictionary_(_default);
-					try {
-						var assembly = Assembly.GetExecutingAssembly();
-						var stream = assembly.GetManifestResourceStream("Dicom.Dictionaries.Private Dictionary.xml.gz");
-						var gzip = new GZipStream(stream, CompressionMode.Decompress);
-						var reader = new DicomDictionaryReader(_default, DicomDictionaryFormat.XML, gzip);
-						reader.Process();
-					} catch (Exception e) {
-						throw new DicomDataException("Unable to load private dictionary from resources.\n\n" + e.Message, e);
-					}
+			if (_default == null) {
+				_default = new DicomDictionary();
+				_default.Add(new DicomDictionaryEntry(DicomMaskedTag.Parse("xxxx", "0000"), "Group Length", "GroupLength", DicomVM.VM_1, false, DicomVR.UL));
+				LoadGeneratedDictionary_(_default);
+				try {
+					var assembly = Assembly.GetExecutingAssembly();
+					var stream = assembly.GetManifestResourceStream("Dicom.Dictionaries.Private Dictionary.xml.gz");
+					var gzip = new GZipStream(stream, CompressionMode.Decompress);
+					var reader = new DicomDictionaryReader(_default, DicomDictionaryFormat.XML, gzip);
+					reader.Process();
+				} catch (Exception e) {
+					throw new DicomDataException("Unable to load private dictionary from resources.\n\n" + e.Message, e);
 				}
 			}
 		}
 
 		public static DicomDictionary Default {
 			get {
-				if (_default == null)
-					LoadInternalDictionaries();
-				return _default;
+				lock (_lock) {
+					if (_default == null)
+						LoadInternalDictionaries();
+					return _default;
+				}
 			}
 			set {
 				lock (_lock)
