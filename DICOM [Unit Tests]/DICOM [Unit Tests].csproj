@@ -72,8 +72,12 @@
     </Compile>
     <Compile Include="DicomPersonNameTest.cs" />
     <Compile Include="DicomTagTest.cs" />
+    <Compile Include="DicomUIDGeneratorTest.cs" />
+    <Compile Include="DicomVRTest.cs" />
     <Compile Include="Helpers\SerializationExtensions.cs" />
+    <Compile Include="Helpers\SuperSimpleDicomWriter.cs" />
     <Compile Include="Imaging\Mathematics\Point2Tests.cs" />
+    <Compile Include="IO\Reader\DicomReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
