@@ -1,6 +1,6 @@
 # Fellow Oak DICOM for Windows 8.1 and Windows Phone 8.1 apps
 
-Copyright (c) 2012-2013 Colby Dillion, adaptations to Windows 8.1 and Windows Phone 8.1 (c) 2012-2013 Anders Gustafsson, Cureos AB
+Copyright (c) 2012-2013 Colby Dillion, adaptations to Windows 8.1 and Windows Phone 8.1 (c) 2012-2015 Anders Gustafsson, Cureos AB
 
 This is a fork of Colby Dillion's [fo-dicom](https://github.com/rcd/fo-dicom) toolkit, aimed at Windows 8.1 (for desktops and tablets) and Windows Phone 8.1 applications. This repository provides libraries with postfixes *Windows* and *Phone*, targetting Windows 8.1 and Windows Phone 8.1, respectively.
 
