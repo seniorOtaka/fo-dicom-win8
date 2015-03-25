@@ -44,7 +44,11 @@ namespace Dicom.IO.Buffer
 				var buffer = new Byte[count];
 				response.GetResponseStream().Read(buffer, 0, count);
 				_buffer = buffer;
+#if NETFX_CORE
+                _size = (uint)_buffer.Length;
+#else
 				_size = (uint)_buffer.LongLength;
+#endif
 			}
 
 			return _buffer;

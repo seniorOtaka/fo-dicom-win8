@@ -111,6 +111,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)IO\Buffer\RangeByteBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Buffer\SwapByteBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Buffer\TempFileBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\Buffer\BulkUriByteBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\JsonDicomConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\ByteConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\DicomIoException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Endian.cs" />
