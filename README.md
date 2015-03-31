@@ -31,9 +31,9 @@ If you like *fo-dicom for Windows 8.1 and Windows Phone 8.1* and want to contrib
 
 <table>
 <tr>
-<th>$10</th>
-<th>$50</th>
-<th>$100</th>
+<th>€10</th>
+<th>€25</th>
+<th>€50</th>
 </tr>
 <tr>
 <td><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8BY5WJSTJYHS6"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif"/></a></td>
