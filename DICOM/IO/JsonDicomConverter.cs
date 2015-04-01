@@ -7,6 +7,7 @@ using System.Linq;
 namespace Dicom.IO
 {
 	using System.Globalization;
+	using System.Text.RegularExpressions;
 
 	public class JsonDicomConverter : JsonConverter
 	{
@@ -240,7 +241,7 @@ namespace Dicom.IO
 					WriteJsonElement<ushort>(writer, (DicomElement)item);
 					break;
 				case "DS":
-					WriteJsonElement<string>(writer, (DicomElement)item, raw: true);
+					WriteJsonDS(writer, (DicomElement)item);
 					break;
 				case "AT":
 					WriteJsonAT(writer, (DicomElement)item);
@@ -252,7 +253,72 @@ namespace Dicom.IO
 			writer.WriteEndObject();
 		}
 
-		private static void WriteJsonElement<T>(JsonWriter writer, DicomElement elem, bool raw = false)
+		private static void WriteJsonDS(JsonWriter writer, DicomElement elem)
+		{
+			if (elem.Count != 0)
+			{
+				writer.WritePropertyName("Value");
+				writer.WriteStartArray();
+				foreach (var val in elem.Get<String[]>())
+				{
+					if (val == null || val.Equals("")) writer.WriteNull();
+					else writer.WriteRawValue(FixDS(val));
+				}
+				writer.WriteEndArray();
+			}
+		}
+
+		private static bool IsValidJsonNumber(string val)
+		{
+			// This is not very inefficient - uses .NET regex caching
+			return Regex.IsMatch(val, "^-?(0|[1-9][0-9]*)([.][0-9]+)?([eE][-+]?[0-9]+)?$");
+		}
+
+		/// <summary>
+		/// Fix-up a Dicom DS number for use with json.
+		/// Rationale: There is a requirement that DS numbers shall be written as json numbers in part 18.F json, but the
+		/// requirements on DS allows values that are not json numbers. This method "fixes" them to conform to json numbers.
+		/// </summary>
+		/// <param name="val">A valid DS value</param>
+		/// <returns>A json number equivalent to the supplied DS value</returns>
+		private static string FixDS(string val)
+		{
+			if (IsValidJsonNumber(val))
+				return val;
+
+			if (String.IsNullOrWhiteSpace(val)) return null;
+
+			val = val.Trim();
+
+			var negative = false;
+			// Strip leading superfluous plus signs
+			if (val[0] == '+')
+				val = val.Substring(1);
+			else if (val[0] == '-')
+			{
+				// Temporarily remove negation sign for zero-stripping later
+				negative = true;
+				val = val.Substring(1);
+			}
+
+			// Strip leading superfluous zeros
+			if (val.Length > 1 && val[0] == '0' && val[1] != '.')
+			{
+				int i = 0;
+				while (i < val.Length - 1 && val[i] == '0' && val[i + 1] != '.') i++;
+				val = val.Substring(i);
+			}
+
+			// Re-add negation sign
+			if (negative) val = "-" + val;
+
+			if (IsValidJsonNumber(val))
+				  return val;
+
+			throw new ArgumentException("Failed converting DS value to json");
+		}
+
+		private static void WriteJsonElement<T>(JsonWriter writer, DicomElement elem)
 		{
 			if (elem.Count != 0)
 			{
@@ -261,7 +327,6 @@ namespace Dicom.IO
 				foreach (var val in elem.Get<T[]>())
 				{
 					if (val == null || (typeof(T) == typeof(string) && val.Equals(""))) writer.WriteNull();
-					else if (raw) writer.WriteRawValue(val as string);
 					else writer.WriteValue(val);
 				}
 				writer.WriteEndArray();
