@@ -148,7 +148,7 @@
       <HintPath>..\packages\MetroLog.0.8.7.1\lib\win81\MetroLog.WinRT.winmd</HintPath>
     </Reference>
     <Reference Include="Shim">
-      <HintPath>..\packages\shim.1.0.1.50302\lib\netcore451\Shim.dll</HintPath>
+      <HintPath>..\packages\shim.1.0.1.50427\lib\netcore451\Shim.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
